@@ -276,7 +276,7 @@ async fn download_file(
     let file_size = metadata.len();
     let modified = metadata.modified().unwrap_or(std::time::SystemTime::UNIX_EPOCH);
     let last_modified = chrono::DateTime::<chrono::Utc>::from(modified).format("%a, %d %b %Y %H:%M:%S GMT").to_string();
-    let etag = format!(r#"{{ "}}"-"{{ "}}""#, file_size, modified.duration_since(std::time::SystemTime::UNIX_EPOCH).unwrap_or_default().as_secs());
+    let etag = format!(r#""{}-{}""#, file_size, modified.duration_since(std::time::SystemTime::UNIX_EPOCH).unwrap_or_default().as_secs());
     
     match AsyncFile::open(&abs_path).await {
         Ok(file) => {
@@ -285,7 +285,7 @@ async fn download_file(
              let filename = abs_path.file_name().unwrap().to_string_lossy().to_string();
              
              let mut headers = HeaderMap::new();
-             headers.insert(header::CONTENT_DISPOSITION, format!("attachment; filename=\"{{}}\"", filename).parse().unwrap());
+             headers.insert(header::CONTENT_DISPOSITION, format!("attachment; filename=\"{}\"", filename).parse().unwrap());
              headers.insert(header::CONTENT_LENGTH, HeaderValue::from_str(&file_size.to_string()).unwrap());
              headers.insert(header::ETAG, HeaderValue::from_str(&etag).unwrap());
              headers.insert(header::LAST_MODIFIED, HeaderValue::from_str(&last_modified).unwrap());
@@ -322,7 +322,7 @@ async fn stream_file(
     let modified = metadata.modified().unwrap_or(std::time::SystemTime::UNIX_EPOCH);
     let last_modified = chrono::DateTime::<chrono::Utc>::from(modified).format("%a, %d %b %Y %H:%M:%S GMT").to_string();
     
-    let etag = format!(r#"{{ "}}"-"{{ "}}""#, file_size, modified.duration_since(std::time::SystemTime::UNIX_EPOCH).unwrap_or_default().as_secs());
+    let etag = format!(r#""{}-{}""#, file_size, modified.duration_since(std::time::SystemTime::UNIX_EPOCH).unwrap_or_default().as_secs());
 
     if let Some(if_none_match) = req.headers().get(header::IF_NONE_MATCH) {
         if if_none_match.to_str().unwrap_or("") == etag {
@@ -356,7 +356,7 @@ async fn stream_file(
             headers.insert(header::CONTENT_TYPE, HeaderValue::from_static("video/mp4")); 
             headers.insert(
                 header::CONTENT_RANGE,
-                HeaderValue::from_str(&format!("bytes {{}}-{{}}/{{}}", start, end, file_size)).unwrap()
+                HeaderValue::from_str(&format!("bytes {}-{}/{}", start, end, file_size)).unwrap()
             );
             headers.insert(
                 header::CONTENT_LENGTH,
@@ -495,9 +495,9 @@ async fn queue_history(
 async fn export_queue(State(state): State<AppState>) -> Response {
     if let Ok(jobs) = state.db.export_all_jobs().await {
         let now = chrono::Local::now();
-        let filename = format!("jobs-export-{{}}", now.format("%Y-%m-%d"));
+        let filename = format!("jobs-export-{}", now.format("%Y-%m-%d"));
         let mut headers = HeaderMap::new();
-        headers.insert(header::CONTENT_DISPOSITION, format!("attachment; filename=\"{{}}\"", filename).parse().unwrap());
+        headers.insert(header::CONTENT_DISPOSITION, format!("attachment; filename=\"{}\"", filename).parse().unwrap());
         (headers, Json(jobs)).into_response()
     } else {
         (StatusCode::INTERNAL_SERVER_ERROR, "Failed").into_response()

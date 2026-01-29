@@ -411,7 +411,7 @@ impl DownloadQueue {
             let re_progress = Regex::new(r"[download]\s+(\d+\.?\d*)%").unwrap();
             let re_eta = Regex::new(r"ETA\s+(\d{2}:\d{2}(?:\:\d{2})?)").unwrap();
             let re_dest = Regex::new(r"\b[dD]estination:\s+(.*)").unwrap();
-            let re_merge = Regex::new(r"\b[mM]erger\b.*into\s+\"?([^\"]*)\"?").unwrap();
+            let re_merge = Regex::new(r#"\b[mM]erger\b.*into\s+"?([^"]*)"?"#).unwrap();
             let re_already = Regex::new(r"\b[dD]ownloaded\s+(.*)\s+has already been downloaded").unwrap();
 
             while let Ok(Some(line)) = reader.next_line().await {
