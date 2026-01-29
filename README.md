@@ -64,6 +64,13 @@ See [server/README.md](server/README.md) for API documentation.
 - **Server**: Modify `server/.env` to change the port or database path.
 - **Web**: Modify `web/.env.local` to point to the server API URL.
 
+## Troubleshooting
+
+- **ffmpeg not found**: Ensure `ffmpeg` is installed on your system and available in your `PATH`.
+- **yt-dlp errors**: The server expects `yt-dlp` to be available. If the automatic detection fails, ensure it is installed and updated (`pip install -U yt-dlp`).
+- **PWA Share Target**: This feature requires the app to be served over **HTTPS** (except for `localhost`) and installed as a PWA on your mobile device.
+- **CORS issues**: Ensure the `ALLOWED_ORIGINS` in your `server/.env` matches the URL where your frontend is hosted.
+
 ## Issues
 
 If you face any issues, feel free to create an issue in this repository.
