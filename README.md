@@ -2,12 +2,14 @@
 
 A self-hosted video downloader and gallery manager.
 
+> **Note:** This whole project is "Vibe Coded". While I guided the architecture and implementation, a significant portion of the code was generated with AI assistance. I only did some of the work myself!
+
 ## Features
 
 - **Queue System**: Add URLs to a download queue (supports TikTok, etc. via yt-dlp).
-- **Gallery**: Browse downloaded videos by date.
+- **Gallery**: Browse downloaded videos by date with a custom player.
 - **History**: View download logs and retry failed jobs.
-- **PWA**: Installable on mobile devices.
+- **PWA Share Target**: Share videos directly from the TikTok app (or others) to Tiak installed on your phone.
 - **Sync**: Optional rclone sync to cloud storage.
 
 ## Setup
@@ -34,6 +36,8 @@ A self-hosted video downloader and gallery manager.
    cargo run --release
    ```
 
+See [server/README.md](server/README.md) for API documentation.
+
 ### Web
 
 1. Navigate to `web/`:
@@ -59,3 +63,11 @@ A self-hosted video downloader and gallery manager.
 
 - **Server**: Modify `server/.env` to change the port or database path.
 - **Web**: Modify `web/.env.local` to point to the server API URL.
+
+## Issues
+
+If you face any issues, feel free to create an issue in this repository.
+
+## License
+
+MIT License. See [LICENSE](LICENSE) file.
